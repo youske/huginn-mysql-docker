@@ -1,0 +1,25 @@
+version: "2"
+services:
+
+  huginn_mysql:
+    image: mysql
+    container_name: huginn_mysql
+    env_file:
+      - ./env/huginn_mysql.env
+    volumes:
+      - "./data:/var/lib/mysql"
+
+  huginn:
+    image: cantino/huginn:latest
+    container_name: huginn
+    mem_limit: 600000000
+    privileged: true
+    tty: true
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./env/huginn.env
+    links:
+      - huginn_mysql:mysql
+    depends_on:
+      - huginn_mysql
